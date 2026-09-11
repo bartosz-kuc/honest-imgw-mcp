@@ -13,7 +13,7 @@ Tools: get_weather, get_hydro, get_warnings, list_weather_stations,
 list_hydro_stations.
 
 Author: Bartosz Kuć <firma@bartosza.pl>
-Repo:   https://github.com/bartosz-kuc/imgw-mcp
+Repo:   https://github.com/bartosz-kuc/honest-imgw-mcp
 License: MIT
 """
 

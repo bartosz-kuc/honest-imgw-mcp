@@ -31,7 +31,7 @@ Five tools:
 ## Setup
 
 ```bash
-git clone https://github.com/bartosz-kuc/imgw-mcp.git
+git clone https://github.com/bartosz-kuc/honest-imgw-mcp.git
 cd imgw-mcp
 python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt

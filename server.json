@@ -3,7 +3,7 @@
   "name": "imgw-mcp",
   "description": "Local MCP server for IMGW-PIB Polish weather, hydro data and warnings — no auth, no cloud middle.",
   "repository": {
-    "url": "https://github.com/bartosz-kuc/imgw-mcp",
+    "url": "https://github.com/bartosz-kuc/honest-imgw-mcp",
     "source": "github"
   },
   "version": "0.1.0",
