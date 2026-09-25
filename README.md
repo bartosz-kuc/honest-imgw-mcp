@@ -1,4 +1,4 @@
-# imgw-mcp
+# honest-imgw-mcp
 
 Local MCP server for **IMGW-PIB** (Polish Institute of Meteorology and Water Management) public data feed — current weather, hydrological readings, and active meteorological warnings across Poland.
 
@@ -32,10 +32,12 @@ Five tools:
 
 ```bash
 git clone https://github.com/bartosz-kuc/honest-imgw-mcp.git
-cd imgw-mcp
+cd honest-imgw-mcp
 python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt
 ```
+
+On Windows use `python` instead of `python3`, and `venv\Scripts\pip` / `venv\Scripts\python` instead of the `venv/bin/...` paths shown here and below.
 
 Register with Claude Code:
 

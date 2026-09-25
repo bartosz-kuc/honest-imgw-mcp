@@ -19,6 +19,7 @@ License: MIT
 
 import asyncio
 import json
+import unicodedata
 from typing import Any
 
 import requests
@@ -28,6 +29,15 @@ from mcp.server.stdio import stdio_server
 from mcp.types import CallToolResult, ListToolsResult, TextContent, Tool
 
 BASE = "https://danepubliczne.imgw.pl/api/data"
+
+# Letters that NFKD does not decompose into base letter + combining mark.
+_FOLD_EXTRA = str.maketrans({"ł": "l", "Ł": "L"})
+
+
+def _ascii_fold(text: str) -> str:
+    """Strip diacritics: 'Łódź' -> 'Lodz', 'Kraków' -> 'Krakow'."""
+    decomposed = unicodedata.normalize("NFKD", text.translate(_FOLD_EXTRA))
+    return "".join(c for c in decomposed if not unicodedata.combining(c))
 
 
 def _get(path: str) -> Any:
@@ -75,7 +85,7 @@ async def _list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "station": {"type": "string", "description": "Station name (case-insensitive, ASCII-fold — e.g. 'warszawa', 'krakow'). Omit to get all."},
+                    "station": {"type": "string", "description": "Station name (case-insensitive, ASCII-folded, spaces and hyphens ignored — e.g. 'warszawa', 'Kraków', 'Jelenia Góra'). Omit to get all."},
                 },
             },
         ),
@@ -128,9 +138,12 @@ async def _call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     if name == "get_weather":
         station = (arguments.get("station") or "").strip()
         if station:
-            # IMGW's per-station endpoint expects lowercase name without diacritics
-            slug = station.lower().replace(" ", "-")
-            data = _get(f"synop/station/{slug}")
+            # IMGW's per-station endpoint expects the name lowercased, without
+            # diacritics, spaces or hyphens: 'Jelenia Góra' -> 'jeleniagora'
+            slug = "".join(_ascii_fold(station.lower()).split()).replace("-", "")
+            # An empty slug would hit synop/station/ and return every station;
+            # send the raw input instead so e.g. '-' still gets the 404 reply.
+            data = _get(f"synop/station/{slug or station.lower()}")
         else:
             data = _get("synop")
         return [TextContent(type="text", text=json.dumps(data, ensure_ascii=False, indent=2))]
