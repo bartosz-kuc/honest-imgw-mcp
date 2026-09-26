@@ -14,13 +14,12 @@ This server is one member of the [honest-mcp family](https://github.com/bartosz-
 
 **In scope:**
 - Code execution paths in `server.py` that could be triggered by AI-client input
-- Handling of authentication material (OAuth tokens, API keys, session state)
 - Any path that could exfiltrate data past the documented "AI ↔ MCP server ↔ upstream API" trust boundary
 - Dependency vulnerabilities that materially expand attack surface
 
 **Not in scope:**
 - Whatever your AI client itself can reach — that is the intended data flow. Trust boundaries are between your AI client and the external service the server wraps.
-- Local credential files (e.g. `credentials.json`, `token.json`) that you generate on your own machine per the setup instructions. These are your responsibility; the shipped `.gitignore` prevents accidental commits.
+- Credentials: none — this server uses no API keys or tokens and only calls the public IMGW-PIB API.
 - Denial-of-service via upstream rate limits (each server documents which public APIs it hits).
 
 ## Supported versions
